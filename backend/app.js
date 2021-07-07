@@ -3,21 +3,25 @@ const express = require('express');
 require('dotenv/config')
 const morgan = require('morgan')
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
+const categoryRoute = require('./routes/categoryRoute');
+
+const app = express();
 
 const PORT = process.env.PORT || '5000'
 app.use(cors());
+app.use(express.json());
 app.options("*", cors());
 
-const app = express();
 app.use(morgan('tiny'));
 
 app.get('/', (req, res, next)=>{
     res.send('Get Request on HOME PAGE of Backend!');
 })
+app.use('/category', categoryRoute)
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@mongodbcluster.mcnv5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-                { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true})
+                { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true, useFindAndModify:true})
 .then(()=>{
     app.listen(PORT, ()=>{
         console.log("Database connection is Ready and Server is Listening on Port ", PORT);
