@@ -87,10 +87,28 @@ const deleteUser = (req, res) =>{
 }
 
 
+const loginUser = async (req, res) =>{
+    const {
+        email,
+        password
+    } = req.body;
+
+    let existingUser = await User.findOne({email:email});
+    if(!existingUser)
+    return res.status(400).send("User with this email not found!")
+    
+    if(!bcryptjs.compareSync(existingUser.password, password))
+    return res.status(400).send("Invalid Credentials, User can't Login!")    
+
+    res.status(200).json({sucess:true, message:"User Logged in Sucessfully", user:existingUser});
+}
+
+
 module.exports = {
     getUsers,
     getUser,
     postUser,
     patchUser,
-    deleteUser
+    deleteUser,
+    loginUser
 };
