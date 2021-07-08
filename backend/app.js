@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const mongoose = require('mongoose');
 const cors = require('cors');
 const categoryRoute = require('./routes/categoryRoute');
+const productRoute = require('./routes/productRoute');
 
 const app = express();
 
@@ -20,8 +21,10 @@ app.get('/', (req, res, next)=>{
 })
 app.use('/category', categoryRoute)
 
+app.use('/product', productRoute);
+
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@mongodbcluster.mcnv5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-                { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true, useFindAndModify:true})
+                { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true, useFindAndModify:false})
 .then(()=>{
     app.listen(PORT, ()=>{
         console.log("Database connection is Ready and Server is Listening on Port ", PORT);
