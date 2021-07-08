@@ -52,7 +52,7 @@ const postProducts = async (req, res) =>{
 
 const patchProducts = async (req, res) =>{
     const {id} = req.params;     
- 
+    // mongoose.isValidObjectId(id); 
     const {name} = req.body;
     const product = await Product.findById(id);
     if(!product)
