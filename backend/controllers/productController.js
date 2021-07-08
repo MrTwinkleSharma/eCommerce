@@ -1,7 +1,7 @@
 const Product = require("../models/product");
 
 const getProductsList = async (req, res) =>{
-    const productList = await Product.find();
+    const productList = await Product.find().populate('category');
 
     if(!productList)
     return res.status(400).send("Products can't be retrieved!")
@@ -13,7 +13,7 @@ const getProductsList = async (req, res) =>{
 const getProducts = async (req, res) =>{
     const {id} = req.params;     
 
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate('category');
 
     if(!product)
     res.status(400).send("Product can't be retrieved!")
