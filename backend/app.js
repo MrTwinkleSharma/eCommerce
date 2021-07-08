@@ -18,13 +18,19 @@ app.options("*", cors());
 app.use(morgan('tiny'));
 app.use(authJwt());
 
+//Handling Errors
+app.use((err, req, res, next)=>{
+    res.status(500).json("Some Error occured on Server!");
+})
+
+
 
 app.get('/', (req, res, next)=>{
     res.send('Get Request on HOME PAGE of Backend!');
 })
-app.use('/categories', categoryRoute)
-app.use('/products', productRoute);
-app.use('/users', userRoute);
+app.use('/api/categories', categoryRoute)
+app.use('/api/products', productRoute);
+app.use('/api/users', userRoute);
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@mongodbcluster.mcnv5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
                 { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true, useFindAndModify:false})
