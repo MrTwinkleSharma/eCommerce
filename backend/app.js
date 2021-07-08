@@ -7,6 +7,7 @@ const cors = require('cors');
 const categoryRoute = require('./routes/categoryRoute');
 const productRoute = require('./routes/productRoute');
 const userRoute = require('./routes/userRoute');
+const authJwt = require('./helpers/authJwt');
 
 const app = express();
 
@@ -14,8 +15,9 @@ const PORT = process.env.PORT || '5000'
 app.use(cors());
 app.use(express.json());
 app.options("*", cors());
-
 app.use(morgan('tiny'));
+app.use(authJwt());
+
 
 app.get('/', (req, res, next)=>{
     res.send('Get Request on HOME PAGE of Backend!');
