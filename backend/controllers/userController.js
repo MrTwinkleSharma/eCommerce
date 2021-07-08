@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 const { isValidObjectId } = require("mongoose");
+const jwt = require('jsonwebtoken');
 
 const getUsers = async (req, res) =>{
     const userList = await User.find().select('-password');
@@ -97,10 +98,25 @@ const loginUser = async (req, res) =>{
     if(!existingUser)
     return res.status(400).send("User with this email not found!")
     
-    if(!bcryptjs.compareSync(existingUser.password, password))
+    // It will return true if matches
+    const isPasswordValid = bcryptjs.compareSync(password, existingUser.password);
+
+    if(!isPasswordValid)
     return res.status(400).send("Invalid Credentials, User can't Login!")    
 
-    res.status(200).json({sucess:true, message:"User Logged in Sucessfully", user:existingUser});
+    const payload = {
+        name:existingUser.name, 
+        email:existingUser.email
+    };
+    const secretKey = process.env.JWT_KEY;
+    const options = {expiresIn:'1h'};
+    
+    const userToken = jwt.sign(payload, secretKey, options);
+    if(!userToken)
+    return res.status(500).send("Server Error Sorry for Inconvenience, User can't Login!")    
+
+
+    res.status(200).json({sucess:true, message:"User Logged in Sucessfully", token:userToken});
 }
 
 
