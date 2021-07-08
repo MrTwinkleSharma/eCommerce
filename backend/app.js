@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const categoryRoute = require('./routes/categoryRoute');
 const productRoute = require('./routes/productRoute');
+const userRoute = require('./routes/userRoute');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res, next)=>{
 app.use('/category', categoryRoute)
 
 app.use('/product', productRoute);
+app.use('/user', userRoute);
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@mongodbcluster.mcnv5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
                 { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true, useFindAndModify:false})
