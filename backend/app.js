@@ -20,10 +20,9 @@ app.use(morgan('tiny'));
 app.get('/', (req, res, next)=>{
     res.send('Get Request on HOME PAGE of Backend!');
 })
-app.use('/category', categoryRoute)
-
-app.use('/product', productRoute);
-app.use('/user', userRoute);
+app.use('/categories', categoryRoute)
+app.use('/products', productRoute);
+app.use('/users', userRoute);
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@mongodbcluster.mcnv5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
                 { useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex:true, useFindAndModify:false})

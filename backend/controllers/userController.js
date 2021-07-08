@@ -1,89 +1,96 @@
-
 const User = require("../models/user");
+const bcryptjs = require("bcryptjs");
+const { isValidObjectId } = require("mongoose");
 
-const getUserslist = async (req, res) =>{
-    const userList = await User.find();
+const getUsers = async (req, res) =>{
+    const userList = await User.find().select('-password');
 
     if(!userList)
-    return res.status(400).send("Users can't be retrieved!")
-    
+    return res.status(400).send("Users can't be retrieved!");
 
     res.status(200).send(userList);
 }
 
-const getUsers = async (req, res) =>{
+const getUser = async (req, res) =>{
     const {id} = req.params;     
+    if(!isValidObjectId(id)) 
+    return res.status(400).send("Id is not valid, Interaction with server can't be proceeded!");
 
-    const user = await User.findById(id);
+    const user = await User.findById(id).select('-password');
 
     if(!user)
-    res.status(400).send("User can't be retrieved!")
+    return res.status(400).send("User can't be retrieved!")
 
     res.status(200).send(user);
 }
-const postUsers = async (req, res) =>{
+const postUser = async (req, res) =>{
     const {
         name,
         email,
-        password
+        // password
     } = req.body;
 
     let existingUser = await User.findOne({email:email});
     if(existingUser)
-    {
-        return res.status(400).send("User exist already!")
-    }
-    const newUser = User({
+    return res.status(400).send("User with this email exist already!")
+    
+    let newUser = User({
         name,
         email,
-        password
+        password:bcryptjs.hashSync(req.body.password,10)
     })
-    await newUser.save();
+    newUser = await newUser.save();
     
     if(!newUser)
     res.status(400).send("User can't be posted!")
-
+    else
     res.status(200).send(newUser);
 }
 
 
-const pacthUsers = async (req, res) =>{
+const patchUser = async (req, res) =>{
     const {id} = req.params;     
-    // mongoose.isValidObjectId(id); 
+    if(!isValidObjectId(id)) 
+    return res.status(400).send("Id is not valid, Interaction with server can't be proceeded!");
+
     const {name} = req.body;
-    const user = await User.findById(id);
+    let user = await User.findById(id);
+    
     if(!user)
-    {
-        return res.status(400).send("User can't be updated!")
-    }
-
+    return res.status(400).send("User can't be updated!")
+    
     user.name = name;
-    await user.save();
+    user = await user.save();
 
+    if(!user)
+    res.status(400).send("User can't be updated!")
+    else
     res.status(200).send(user);
 }
 
-const deleteUsers = (req, res) =>{
+const deleteUser = (req, res) =>{
     const {id} = req.params;
+    if(!isValidObjectId(id)) 
+    return res.status(400).send("Id is not valid, Interaction with server can't be proceeded!");
 
     User.findByIdAndRemove(id)
     .then((user)=>{
         if(user)
-        res.status(200).json({success:true, message:"user is Deleted!"})
+        res.status(200).json({success:true, message:"User is Deleted!"})
         else
-        res.status(404).json({success:false, message:"user not found!"})
+        res.status(404).json({success:false, message:"User not found!"})
         
     })
     .catch((err)=>{
-        res.status(404).json({success:false, message:"user can't be Deleted!"})
+        res.status(500).json({success:false, message:"User can't be Deleted, due to some Error!"})
     });
 }
 
 
 module.exports = {
-    getUserslist,
     getUsers,
-    postUsers,
-    pacthUsers,
-    deleteUsers
+    getUser,
+    postUser,
+    patchUser,
+    deleteUser
 };
