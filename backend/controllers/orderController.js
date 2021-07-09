@@ -3,7 +3,7 @@ const { isValidObjectId } = require("mongoose");
 const OrderItem = require("../models/orderItem");
 
 const getOrders = async (req, res) =>{
-    const orderList = await Order.find();
+    const orderList = await Order.find().populate('user', 'name');
 
     if(!orderList)
     return res.status(400).send("Orders can't be retrieved!");
@@ -16,7 +16,7 @@ const getOrder = async (req, res) =>{
     if(!isValidObjectId(id)) 
     return res.status(400).send("Id is not valid, Interaction with server can't be proceeded!");
 
-    const order = await Order.findById(id).populate('user');
+    const order = await Order.findById(id).populate('user','name');
 
     if(!order)
     return res.status(400).send("Order can't be retrieved!")
