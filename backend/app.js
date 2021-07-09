@@ -11,6 +11,7 @@ const productRoute = require('./routes/productRoute');
 const userRoute = require('./routes/userRoute');
 const authJwt = require('./helpers/authJwt');
 const errorHandler = require('./helpers/errorHandler');
+const orderRoute = require('./routes/orderRoute');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.get('/', (req, res, next)=>{
 app.use('/api/categories', categoryRoute)
 app.use('/api/products', productRoute);
 app.use('/api/users', userRoute);
+app.use('/api/orders', orderRoute);
 
 
 //Database Connection & Server Listen

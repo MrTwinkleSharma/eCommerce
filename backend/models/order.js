@@ -31,7 +31,6 @@ const orderSchema = mongoose.Schema({
     },
     user:{
         type:mongoose.Types.ObjectId,
-        ref:'OrderItem',
         required:true
     }
 });

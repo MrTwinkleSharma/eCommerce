@@ -11,7 +11,9 @@ module.exports = function authJwt(){
             {url:"/api/users/login"},
             {url:"/api/users/signup"},
             {url:/\/api\/products(.*)/, methods:["GET", "OPTIONS"]},
-            {url:/\/api\/categories(.*)/, methods:["GET", "OPTIONS"]}
+            {url:/\/api\/categories(.*)/, methods:["GET", "OPTIONS"]},
+            {url:/\/api\/orders(.*)/, methods:["GET", "OPTIONS"]}
+        
         ]
     })
 }
