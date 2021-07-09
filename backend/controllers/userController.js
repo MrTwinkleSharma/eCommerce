@@ -106,7 +106,8 @@ const loginUser = async (req, res) =>{
 
     const payload = {
         name:existingUser.name, 
-        email:existingUser.email
+        email:existingUser.email,
+        isAdmin:existingUser.isAdmin
     };
     const secretKey = process.env.JWT_KEY;
     const options = {expiresIn:'1h'};
