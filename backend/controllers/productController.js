@@ -83,6 +83,27 @@ const deleteProducts = (req, res) =>{
     });
 }
 
+const patchProductGallery = async (req, res) =>{
+    const {id} = req.params;     
+    let product = await Product.findById(id);
+   
+    const files = req.files;
+    if(!files) return res.status(400).send("Image not Found!")
+    
+    const pathOfImages = [];
+    files.map(file=>{
+        pathOfImages.push(file.path);
+    })
+
+    product.images = pathOfImages;
+    await product.save();
+
+    if(!product)
+    res.status(400).send("Product Gallery can't be Updated!")
+    else
+    res.status(200).send(product);
+}
+
 
 
 module.exports = {
@@ -90,5 +111,6 @@ module.exports = {
     postProducts,
     getProductsList,
     patchProducts,
-    deleteProducts
+    deleteProducts,
+    patchProductGallery
 };
