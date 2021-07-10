@@ -54,10 +54,12 @@ const productSchema = mongoose.Schema({
     }
 });
 
+//Creating Virtual 'id' 
 productSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 
+//Enabling serialization(converting string to objects) of virtual fields
 productSchema.set('toJSON',{
    virtuals:true 
 });

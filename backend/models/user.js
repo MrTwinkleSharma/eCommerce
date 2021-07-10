@@ -37,4 +37,14 @@ const userSchema = mongoose.Schema({
     }
 });
 
+//Creating Virtual 'id' 
+userSchema.virtual('id').get(function () {
+    return this._id.toHexString();
+});
+
+//Enabling serialization(converting string to objects) of virtual fields
+userSchema.set('toJSON',{
+   virtuals:true 
+});
+
 module.exports = mongoose.model('User', userSchema);

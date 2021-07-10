@@ -15,4 +15,14 @@ const orderItemSchema = mongoose.Schema({
 
 });
 
+//Creating Virtual 'id' 
+orderItemSchema.virtual('id').get(function () {
+    return this._id.toHexString();
+});
+
+//Enabling serialization(converting string to objects) of virtual fields
+orderItemSchema.set('toJSON',{
+   virtuals:true 
+});
+
 module.exports = mongoose.model('OrderItem', orderItemSchema);
