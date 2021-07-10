@@ -33,6 +33,11 @@ const orderSchema = mongoose.Schema({
         type:mongoose.Types.ObjectId,
         required:true,
         ref:'User',
+    },
+    status:{
+        type:String,
+        required:true,
+        default:"Pending"
     }
 });
 

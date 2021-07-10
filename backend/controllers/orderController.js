@@ -80,6 +80,23 @@ const patchOrder = async (req, res) =>{
     res.status(200).send(order);
 }
 
+// const patchOrderStatus = async (req, res) =>{
+//     const {id} = req.params;     
+//     if(!isValidObjectId(id)) 
+//     return res.status(400).send("Id is not valid, Interaction with server can't be proceeded!");
+
+//     const update = {status:req.body.status};
+//     const options = {new:true};
+
+//     const order = Order.findByIdAndUpdate(id, update, options);
+    
+//     if(!order)
+//     return res.status(400).send("Order status can't be updated!")
+//     else
+//     res.status(204).send("Order status updated Successfully!")
+    
+// }
+
 const deleteOrder = (req, res) =>{
     const {id} = req.params;
     if(!isValidObjectId(id)) 
@@ -87,6 +104,9 @@ const deleteOrder = (req, res) =>{
 
     Order.findByIdAndRemove(id)
     .then((order)=>{
+        order.orderItems.map(async orderItem=> {
+            await OrderItem.findByIdAndRemove(orderItem);
+        })
         if(order)
         res.status(200).json({success:true, message:"Order is Deleted!"})
         else
@@ -104,4 +124,5 @@ module.exports = {
     postOrder,
     patchOrder,
     deleteOrder
+    // patchOrderStatus
 };
