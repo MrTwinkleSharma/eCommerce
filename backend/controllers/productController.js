@@ -1,7 +1,12 @@
 const Product = require("../models/product");
 
 const getProductsList = async (req, res) =>{
-    const productList = await Product.find().populate('category');
+
+    let filterCategory = {};
+    if(req.query.categories)
+    filterCategory = {category:req.query.categories.split(",")};
+
+    const productList = await Product.find(filterCategory).populate('category');
 
     if(!productList)
     return res.status(400).send("Products can't be retrieved!")
