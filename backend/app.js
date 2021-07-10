@@ -21,6 +21,7 @@ app.use(express.json());
 app.options("*", cors());
 app.use(morgan('tiny'));
 app.use(authJwt());
+app.use('/uploads/product_images', express.static(__dirname + '/uploads/product_images'));
 
 //Handling Errors
 app.use(errorHandler);
