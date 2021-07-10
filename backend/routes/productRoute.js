@@ -4,13 +4,17 @@ const {
     getProductsList,
     patchProducts,
     deleteProducts,
-    patchProductGallery
+    patchProductGallery,
+    getFeaturedProducts
 } = require('../controllers/productController');
 
 const fileUploadConfig = require('../helpers/fileUploadConfig');
 const router = require('express').Router()
 
 router.get('/', getProductsList);
+
+//Don't forget to correct placing of routes if there is any placeholder
+router.get('/featured', getFeaturedProducts);
 router.get('/:id', getProducts);
 
 //Adding the multer config

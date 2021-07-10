@@ -104,13 +104,20 @@ const patchProductGallery = async (req, res) =>{
     res.status(200).send(product);
 }
 
-
-
+const getFeaturedProducts = async (req, res) =>{
+    const products = await Product.find({isFeatured:true})
+    
+    if(!products)
+    res.status(400).send("Products can't be retrieved!");
+    else
+    res.status(200).send(products);
+}
 module.exports = {
     getProducts,
     postProducts,
     getProductsList,
     patchProducts,
     deleteProducts,
-    patchProductGallery
+    patchProductGallery,
+    getFeaturedProducts
 };
