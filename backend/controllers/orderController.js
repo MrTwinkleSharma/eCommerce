@@ -29,6 +29,22 @@ const getOrder = async (req, res) =>{
 
     res.status(200).send(order);
 }
+const getOrdersByUserId = async (req, res) =>{
+    const {id} = req.params;     
+    if(!isValidObjectId(id)) 
+    return res.status(400).send("Id is not valid, Interaction with server can't be proceeded!");
+
+    const order = await Order.find({user:id})
+    .populate({path:'orderItems', 
+                        populate:{path:'product',
+                                    populate:'category'}});
+
+
+    if(!order)
+    return res.status(400).send("Order can't be retrieved!")
+
+    res.status(200).send(order);
+}
 const postOrder = async (req, res) =>{
     const orderItemsIds = Promise.all(req.body.orderItems.map(async (orderitem) => {
         let orderItem = OrderItem({
@@ -123,6 +139,7 @@ module.exports = {
     getOrder,
     postOrder,
     patchOrder,
-    deleteOrder
+    deleteOrder,
+    getOrdersByUserId
     // patchOrderStatus
 };
