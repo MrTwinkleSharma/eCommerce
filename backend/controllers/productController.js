@@ -29,17 +29,18 @@ const postProducts = async (req, res) =>{
         category
     } = req.body;
 
-    let existingProduct = await Product.findOne({name:name});
-    if(existingProduct)
+    const file = req.file;
+    if(!file)
     {
-        return res.status(400).send("Product exist already!")
+        return res.status(400).send("Image not Found!")
     }
     const newProduct = Product({
         name,
         description,
         price,
         stockCount,
-        category
+        category,
+        image:req.file.path
     })
     await newProduct.save();
     
