@@ -1,5 +1,7 @@
+import Home from "./home/Pages/Home";
+
 function App() {
-  return <div>Working on Frontend!!</div>
+  return <Home/>
 }
 
 export default App;
